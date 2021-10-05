@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:memooo/model/memo.dart';
 
 class TopPage extends StatefulWidget {
-  const TopPage({Key? key, required this.title}) : super(key: key);
+  const TopPage({Key key,  this.title}) : super(key: key);
   final String title;
 
   @override
@@ -9,12 +11,25 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  int _counter = 0;
+  List<Memo> memoList = [];
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+  Future<void> getMemo() async{
+    var snapshot = await FirebaseFirestore.instance.collection('memo').get();
+    var docs = snapshot.docs;
+    docs.forEach((doc){
+      memoList.add(Memo(
+        title: doc.data()['title'],
+        detail: doc.data()['detail']
+      ));
     });
+    setState((){
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getMemo();
   }
 
   @override
@@ -23,22 +38,18 @@ class _TopPageState extends State<TopPage> {
       appBar: AppBar(
         title: Text("memooo"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+          itemCount: memoList.length,
+          itemBuilder: (context,index){
+            return ListTile(
+              title: Text(memoList[index].title),
+            );
+          },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: (){
+
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
