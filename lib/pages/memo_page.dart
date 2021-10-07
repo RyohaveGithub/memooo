@@ -17,9 +17,9 @@ class MemoPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:  [
-            Text("確認画面です",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            Text(memo.detail,style: TextStyle(fontSize: 18,)
-          ],
+            const Text("確認画面です",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            Text(memo.detail,style: const TextStyle(fontSize: 18)),
+          ]
         ),
       ),
     );

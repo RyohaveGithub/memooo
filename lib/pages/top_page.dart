@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:memooo/model/memo.dart';
 import 'package:memooo/pages/memo_page.dart';
 
+
 class TopPage extends StatefulWidget {
-  const TopPage({Key key,  this.title}) : super(key: key);
+  const TopPage({Key? key,  required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -20,7 +21,9 @@ class _TopPageState extends State<TopPage> {
     docs.forEach((doc){
       memoList.add(Memo(
         title: doc.data()['title'],
-        detail: doc.data()['detail']
+        detail: doc.data()['detail'],
+        createdTime:  doc.data()['createdTime'],
+        updateTime: doc.data()['updateTime'],
       ));
     });
     setState((){
