@@ -18,12 +18,12 @@ class _TopPageState extends State<TopPage> {
   Future<void> getMemo() async{
     var snapshot = await FirebaseFirestore.instance.collection('memo').get();
     var docs = snapshot.docs;
-    docs.forEach((doc){
+    docs.forEach((doc) async {
       memoList.add(Memo(
         title: doc.data()['title'],
         detail: doc.data()['detail'],
-        createdTime:  doc.data()['createdTime'],
-        updateTime: doc.data()['updateTime'],
+        createdTime:  DateTime.now(),
+        updateTime: DateTime.now(),
       ));
     });
     setState((){

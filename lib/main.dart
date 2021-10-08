@@ -5,7 +5,7 @@ import 'package:memooo/pages/top_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,3 +24,4 @@ class MyApp extends StatelessWidget {
 }
 
 //Todo firebase ios未対応
+//todo emulater firebase 非対応
