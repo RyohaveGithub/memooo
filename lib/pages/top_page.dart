@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:memooo/model/memo.dart';
+import 'package:memooo/pages/add_memo_page.dart';
 import 'package:memooo/pages/memo_page.dart';
 
 
@@ -55,7 +56,7 @@ class _TopPageState extends State<TopPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddMemoPage()));
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
