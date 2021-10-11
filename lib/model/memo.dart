@@ -4,6 +4,6 @@ class Memo{
   DateTime createdTime;
   DateTime updateTime;
 
-  Memo({required this.title,required this.detail,required this.createdTime,required this.updateTime});
+  Memo({this.title,this.detail,this.createdTime,this.updateTime});
 
 }

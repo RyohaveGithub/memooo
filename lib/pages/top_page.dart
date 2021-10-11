@@ -6,7 +6,7 @@ import 'package:memooo/pages/memo_page.dart';
 
 
 class TopPage extends StatefulWidget {
-  const TopPage({Key? key,  required this.title}) : super(key: key);
+  const TopPage({Key key,   this.title}) : super(key: key);
   final String title;
 
   @override
@@ -16,25 +16,9 @@ class TopPage extends StatefulWidget {
 class _TopPageState extends State<TopPage> {
   List<Memo> memoList = [];
 
-  Future<void> getMemo() async{
-    var snapshot = await FirebaseFirestore.instance.collection('memo').get();
-    var docs = snapshot.docs;
-    docs.forEach((doc) async {
-      memoList.add(Memo(
-        title: doc.data()['title'],
-        detail: doc.data()['detail'],
-        createdTime:  DateTime.now(),
-        updateTime: DateTime.now(),
-      ));
-    });
-    setState((){
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    getMemo();
   }
 
   @override
@@ -43,16 +27,24 @@ class _TopPageState extends State<TopPage> {
       appBar: AppBar(
         title: Text("memooo"),
       ),
-      body: ListView.builder(
-          itemCount: memoList.length,
-          itemBuilder: (context,index){
-            return ListTile(
-              title: Text(memoList[index].title),
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MemoPage(memoList[index])));
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("memo").snapshots(),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState== ConnectionState.waiting){
+            return CircularProgressIndicator();
+          }
+          return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context,index){
+                return ListTile(
+                  title: Text(snapshot.data.docs[index]['title']),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MemoPage(snapshot.data.docs[index])));
+                  },
+                );
               },
-            );
-          },
+          );
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
