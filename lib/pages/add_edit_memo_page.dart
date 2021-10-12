@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AddMemoPage extends StatefulWidget {
-  const AddMemoPage({Key key}) : super(key: key);
+class AddEditMemoPage extends StatefulWidget {
+  final QueryDocumentSnapshot memo;
+  AddEditMemoPage({this.memo});
 
   @override
-  _AddMemoPageState createState() => _AddMemoPageState();
+  _AddEditMemoPageState createState() => _AddEditMemoPageState();
 }
 
-class _AddMemoPageState extends State<AddMemoPage> {
+class _AddEditMemoPageState extends State<AddEditMemoPage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController detailController = TextEditingController();
 
@@ -21,11 +22,30 @@ class _AddMemoPageState extends State<AddMemoPage> {
         "createdTime":Timestamp.now()
     });
   }
+
+  Future<void> UpdateMemo()async{
+    var document = FirebaseFirestore.instance.collection("memo").doc(widget.memo.id);
+    await document.update({
+      "title":titleController.text,
+      "detail":detailController.text,
+      "updatedTime":Timestamp.now()
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.memo !=null){
+      titleController.text = widget.memo['title'];
+      detailController.text = widget.memo['detail'];
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("メモを追加"),
+        title: Text(widget.memo ==null? "メモを追加":"メモを編集"),
       ),
       body: Center(
         child: Column(
@@ -79,11 +99,15 @@ class _AddMemoPageState extends State<AddMemoPage> {
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   onPressed: () async{
-                    await AddMemo();
+                    if(widget.memo ==null){
+                      await AddMemo();
+                    }else {
+                      await UpdateMemo();
+                    }
                     Navigator.pop(context);
                   },
                   child:
-                  Text("追加"
+                  Text(widget.memo ==null? "追加":"編集"
                   ,style: TextStyle(
                       color:Colors.white,
                   ),),

@@ -13,13 +13,15 @@ class MemoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(memo['title'])
-      ),
+          // title: Text(memo.data()['title'])
+    ),
         body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:  [
             const Text("確認画面です",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
             Text(memo["detail"],style: const TextStyle(fontSize: 18)),
+          //Text(memo.data()["detail"],style: const TextStyle(fontSize: 18)),
           ]
         ),
       ),
